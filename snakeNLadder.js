@@ -1,12 +1,110 @@
+function printDice1() {
+  let box = '┏━━━━━━━━┓\n';
+  box += '┃        ┃\n';
+  box += '┃   ⬤    ┃\n';
+  box += '┃        ┃\n';
+  box += '┗━━━━━━━━┛';
+
+  return box;
+}
+
+function printDice2() {
+  let box = '┏━━━━━━━━┓\n';
+  box += '┃ ⬤      ┃\n';
+  box += '┃        ┃\n';
+  box += '┃     ⬤  ┃\n';
+  box += '┗━━━━━━━━┛';
+
+  return box;
+}
+
+function printDice3() {
+  let box = '┏━━━━━━━━┓\n';
+  box += '┃⬤       ┃\n';
+  box += '┃   ⬤    ┃\n';
+  box += '┃      ⬤ ┃\n';
+  box += '┗━━━━━━━━┛';
+
+  return box;
+}
+
+function printDice4() {
+  let box = '┏━━━━━━━━┓\n';
+  box += '┃ ⬤   ⬤  ┃\n';
+  box += '┃        ┃\n';
+  box += '┃ ⬤   ⬤  ┃\n';
+  box += '┗━━━━━━━━┛';
+
+  return box;
+}
+
+function printDice5() {
+  let box = '┏━━━━━━━━┓\n';
+  box += '┃ ⬤   ⬤  ┃\n';
+  box += '┃   ⬤    ┃\n';
+  box += '┃ ⬤   ⬤  ┃\n';
+  box += '┗━━━━━━━━┛';
+
+  return box;
+}
+
+function printDice6() {
+  let box = '┏━━━━━━━━┓\n';
+  box += '┃ ⬤   ⬤  ┃ \n';
+  box += '┃ ⬤   ⬤  ┃ \n';
+  box += '┃ ⬤   ⬤  ┃ \n';
+  box += '┗━━━━━━━━┛';
+
+  return box;
+}
+
+function printDice(diceNumber) {
+  switch (diceNumber) {
+    case 1: return printDice1();
+    case 2: return printDice2();
+    case 3: return printDice3();
+    case 4: return printDice4();
+    case 5: return printDice5();
+    case 6: return printDice6();
+  }
+}
+
 function dice() {
-  let diceValue = Math.random() * 6;
-  diceValue = Math.ceil(diceValue);
+  return Math.ceil(Math.random() * 6);
+}
+
+function getALine(length) {
+  let line = '';
+  for (let iterator = 0; iterator < length; iterator += 1) {
+    line += '━';
+  }
+
+  return line;
+} 
+
+function createMessageBox(message) {
+  const box = '┏' + getALine(message.length) + '┓\n┃' + message + '┃\n┗';
+  return box + getALine(message.length) + '┛\n';
+}
+
+function rollDice() {
+  let diceValue = 0;
+
+  for (let noOfTimes = 0; noOfTimes < 350; noOfTimes += 20) {
+    for (let counter = 0; counter < noOfTimes * 1000000; counter += 1) {
+    }
+
+    console.clear();
+    diceValue = dice();
+    console.log(createMessageBox("Snake 🐍 And Ladder 🪜"));
+    console.log(printDice(diceValue));
+  }
 
   return diceValue;
 }
 
-function snakeOrLadder(currentPlayerPos) {
-  switch (currentPlayerPos) {
+function getSnakeOrLadder(playerPosition) {
+  switch (playerPosition) {
     case 5: return 58;
     case 14: return 59;
     case 38: return 20;
@@ -19,63 +117,160 @@ function snakeOrLadder(currentPlayerPos) {
     case 75: return 94;
     case 91: return 73;
     case 97: return 3;
-    default: return currentPlayerPos;
+    default: return playerPosition;
   }
 }
 
-function updatePosition(currentPlayerPos, playerNumber) {
-  prompt('\n' + playerNumber + "'s turn");
-  console.clear();
-  const diceValue = dice();
-  currentPlayerPos += currentPlayerPos + diceValue <= 100 ? diceValue : 0;
-  const updatedPlayerPos = snakeOrLadder(currentPlayerPos);
-  if (updatedPlayerPos < currentPlayerPos) {
-    console.log('\nOhh noo😱.... 🐍 A snake bite you..');
+function playerPosMessage(updatedPlayerPos, playerPosition, diceValue) {
+  if (updatedPlayerPos < playerPosition) {
+    console.log(createMessageBox("Ohh noo 😱.... 🐍 A snake bit you.."));
   }
-  if (updatedPlayerPos > currentPlayerPos) {
-    console.log('\nHurray 🙌.... 🪜 You climbed a ladder..');
+  if (updatedPlayerPos > playerPosition) {
+    console.log(createMessageBox("Hurray 🙌.... 🪜 You climbed a ladder.."));
   }
-  if (updatedPlayerPos === currentPlayerPos) {
-    console.log('\nMoved Forward by ' + diceValue + '...😊');
+  if (updatedPlayerPos === playerPosition) {
+    console.log(createMessageBox("Moved Forward by " + diceValue + "...😊"));
   }
-  console.log(playerNumber + ' Your Current Position is : ' + updatedPlayerPos + '\n');
+}
+
+function updatePosition(updatedPlayerPos, playerPosition, diceValue, playerNumber) {
+  playerPosMessage(updatedPlayerPos, playerPosition, diceValue);
+  console.log(playerNumber + " Current Position is: " + updatedPlayerPos);
+}
+
+function getNewPosition(playerPosition, playerNumber) {
+  const diceValue = rollDice();
+
+  playerPosition += (playerPosition + diceValue <= 100) ? diceValue : 0;
+  const updatedPlayerPos = getSnakeOrLadder(playerPosition);
+
+  updatePosition(updatedPlayerPos, playerPosition, diceValue, playerNumber);
+
   return updatedPlayerPos;
 }
 
-function player1() {
+function didPlayerWin(p1Position, p2Position, p3Position, p4Position) {
+  return p1Position === 100 || p2Position === 100 || p3Position === 100 || p4Position === 100;
+}
+
+function whoWon(p1Position, p2Position, p3Position, p4Position, playerNames) {
+  if (p1Position === 100) { return '🥳..' + playerNames[0] + ' Won.. 🎊\n'; }
+  if (p2Position === 100) { return '🥳..' + playerNames[1] + ' Won.. 🎊\n'; }
+  if (p3Position === 100) { return '🥳..' + playerNames[2] + ' Won.. 🎊\n'; }
+  if (p4Position === 100) { return '🥳..' + playerNames[3] + ' Won.. 🎊\n'; }
+}
+
+function getPlayerNames(noOfPlayer) {
+  let playerNames = [];
+  for (let player = 0; player < noOfPlayer; player += 1) {
+    playerNames[player] = prompt("Enter name of Player: ");
+  }
+
+  return playerNames;
+}
+
+function printGrid(p1Position, p2Position, p3Position, p4Position) {
+  console.log(getHeading());
+  for (let row = 10; row > 0; row -= 1) {
+    createGrids(p1Position, p2Position, p3Position, p4Position, row * 10);
+  }
+  console.log(getFooting());  
+}
+
+
+function getHeading() {
+  return '┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┓';
+}
+
+function getFooting() {
+  return '┗━━━━━━━━┻━━━━━━━━┻━━━━━━━━┻━━━━━━━━┻━━━━━━━━┻━━━━━━━━┻━━━━━━━━┻━━━━━━━━┻━━━━━━━━┻━━━━━━━━┛';
+}
+
+function getRowFooting() {
+  return '┣━━━━━━━━╋━━━━━━━━╋━━━━━━━━╋━━━━━━━━╋━━━━━━━━╋━━━━━━━━╋━━━━━━━━╋━━━━━━━━╋━━━━━━━━╋━━━━━━━━┫';
+}
+
+function createUpperPart(p1, p2, rowStartsWith, p1Name, p2Name) {
+  let rowWallSAndL = '';
+  for (let boxNumber = rowStartsWith; boxNumber > rowStartsWith - 10; boxNumber--) {
+    
+    rowWallSAndL += boxNumber === p1 ? p1Name + '  ' : '    ';
+    rowWallSAndL += p2 > 0 && boxNumber === p2 ? '  ' + p2Name : '    ';
+    rowWallSAndL += '┃';
+  }
+  
+  return '┃' + rowWallSAndL;
+}
+
+function createMiddlePart(rowStartsWith) {
+  let rowWallSAndL = '';
+  for (let boxNumber = rowStartsWith; boxNumber > rowStartsWith - 10; boxNumber--) {
+    
+    const boxValue = boxNumberSnakeOrLadder(boxNumber);
+    
+    rowWallSAndL += boxValue === '100' ? boxValue + '  ┃   ' : boxValue + '   ┃   ';
+  }
+  
+  return '┃   ' + rowWallSAndL;
+}
+
+function boxNumberSnakeOrLadder(boxNumber) {
+  if (boxNumber === 5 || boxNumber === 14 || boxNumber === 42 || boxNumber === 53 || boxNumber === 64 || boxNumber === 75) {
+    return '🪜';
+  }
+  
+  if (boxNumber === 38 || boxNumber === 45 || boxNumber === 51 || boxNumber === 65 || boxNumber === 91 || boxNumber === 97) {
+    return '🐍';
+  }
+  if (boxNumber < 10) {
+    return "0" + boxNumber;
+  }
+  return '' + boxNumber;
+}
+
+function createGrids(p1, p2, p3, p4, rowStartsWith) {
+  console.log(createUpperPart(p1, p2, rowStartsWith, '🟡', '🔴'));
+  console.log(createMiddlePart(rowStartsWith));
+  console.log(createUpperPart(p3, p4, rowStartsWith, '🟢', '🔵'));
+  if (rowStartsWith != 10) {
+    console.log(getRowFooting());
+  }
+}
+
+function startPlay() {
   let p1Position = 1;
   let p2Position = 1;
   let p3Position = 1;
   let p4Position = 1;
-  console.log('\n!!!SNAKE AND LADDER!!!');
-  const noOfPlayer = prompt('Enter No Of Players : ');
-  let value = 0;
 
-  while (p1Position !== 100 && p2Position !== 100 && p3Position !== 100 && p4Position !== 100) {
+  console.log(createMessageBox("Snake 🐍 And Ladder 🪜 "));
 
-    if (value % noOfPlayer === 0) {
-      p1Position = updatePosition(p1Position, 'Player 1');
-      value = 1;
-    }
-    if (value % noOfPlayer === 1) {
-      p2Position = updatePosition(p2Position, 'Player 2');
-      value = 2;
-    }
-    if (value % noOfPlayer === 2) {
-      p3Position = updatePosition(p3Position, 'Player 3');
-      value = 3;
-    }
-    if (value % noOfPlayer === 3) {
-      p4Position = updatePosition(p4Position, 'Player 4');
-      value = 4;
-    }
+  const noOfPlayer = +prompt("Enter No Of Players : ", '1');
+  const playerNames = getPlayerNames(noOfPlayer);
 
+  let turn = 1;
+
+  while (!didPlayerWin(p1Position, p2Position, p3Position, p4Position)) {
+    printGrid(p1Position, p2Position, p3Position, p4Position);
+    prompt(playerNames[turn - 1] + "'s turn");
+
+    if (turn === 1) {
+      p1Position = getNewPosition(p1Position, playerNames[turn - 1]);
+    }
+    if (turn === 2) {
+      p2Position = getNewPosition(p2Position, playerNames[turn - 1]);
+    }
+    if (turn === 3) {
+      p3Position = getNewPosition(p3Position, playerNames[turn - 1]);
+    }
+    if (turn === 4) {
+      p4Position = getNewPosition(p4Position, playerNames[turn - 1]);
+    }
+    turn = turn === noOfPlayer ? 1 : turn + 1;
   }
 
-  if (p1Position === 100) { return '🥳 Player 1 Won.. 🎊\n'; }
-  if (p2Position === 100) { return '🥳 Player 2 Won.. 🎊\n'; }
-  if (p3Position === 100) { return '🥳 Player 3 Won.. 🎊\n'; }
-  if (p4Position === 100) { return '🥳 Player 4 Won.. 🎊\n'; }
+
+  return whoWon(p1Position, p2Position, p3Position, p4Position, playerNames);
 }
 
-console.log(player1());
+console.log(startPlay());
