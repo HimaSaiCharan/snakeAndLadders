@@ -24,20 +24,21 @@ function snakeOrLadder(currentPlayerPos) {
 }
 
 function updatePosition(currentPlayerPos, playerNumber) {
-  prompt(playerNumber + "'s turn");
+  prompt('\n' + playerNumber + "'s turn");
+  console.clear();
   const diceValue = dice();
   currentPlayerPos += currentPlayerPos + diceValue <= 100 ? diceValue : 0;
   const updatedPlayerPos = snakeOrLadder(currentPlayerPos);
   if (updatedPlayerPos < currentPlayerPos) {
-    console.log('Ohh noo😱.... 🐍 A snake bite you..');
+    console.log('\nOhh noo😱.... 🐍 A snake bite you..');
   }
   if (updatedPlayerPos > currentPlayerPos) {
-    console.log('Hurray 🙌.... 🪜 You climbed a ladder..');
+    console.log('\nHurray 🙌.... 🪜 You climbed a ladder..');
   }
   if (updatedPlayerPos === currentPlayerPos) {
-    console.log('Moved Forward by ' + diceValue + '...😊');
+    console.log('\nMoved Forward by ' + diceValue + '...😊');
   }
-  console.log(playerNumber + ' Your Current Position is : ' + updatedPlayerPos);
+  console.log(playerNumber + ' Your Current Position is : ' + updatedPlayerPos + '\n');
   return updatedPlayerPos;
 }
 
@@ -46,31 +47,35 @@ function player1() {
   let p2Position = 1;
   let p3Position = 1;
   let p4Position = 1;
-  console.log('!!!SNAKE AND LADDER!!!');
+  console.log('\n!!!SNAKE AND LADDER!!!');
   const noOfPlayer = prompt('Enter No Of Players : ');
   let value = 0;
 
   while (p1Position !== 100 && p2Position !== 100 && p3Position !== 100 && p4Position !== 100) {
+
     if (value % noOfPlayer === 0) {
       p1Position = updatePosition(p1Position, 'Player 1');
+      value = 1;
     }
     if (value % noOfPlayer === 1) {
       p2Position = updatePosition(p2Position, 'Player 2');
+      value = 2;
     }
     if (value % noOfPlayer === 2) {
       p3Position = updatePosition(p3Position, 'Player 3');
+      value = 3;
     }
     if (value % noOfPlayer === 3) {
       p4Position = updatePosition(p4Position, 'Player 4');
+      value = 4;
     }
 
-    value++;
   }
 
-  if (p1Position === 100) { return '🥳 Player 1 Won.. 🎊'; }
-  if (p2Position === 100) { return '🥳 Player 2 Won.. 🎊'; }
-  if (p3Position === 100) { return '🥳 Player 3 Won.. 🎊'; }
-  if (p4Position === 100) { return '🥳 Player 4 Won.. 🎊'; }
+  if (p1Position === 100) { return '🥳 Player 1 Won.. 🎊\n'; }
+  if (p2Position === 100) { return '🥳 Player 2 Won.. 🎊\n'; }
+  if (p3Position === 100) { return '🥳 Player 3 Won.. 🎊\n'; }
+  if (p4Position === 100) { return '🥳 Player 4 Won.. 🎊\n'; }
 }
 
 console.log(player1());
