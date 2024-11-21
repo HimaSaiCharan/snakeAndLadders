@@ -90,7 +90,7 @@ function createMessageBox(message) {
 function rollDice() {
   let diceValue = 0;
 
-  for (let noOfTimes = 0; noOfTimes < 350; noOfTimes += 20) {
+  for (let noOfTimes = 0; noOfTimes < 350; noOfTimes += 30) {
     for (let counter = 0; counter < noOfTimes * 1000000; counter += 1) {
     }
 
